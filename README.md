@@ -1,18 +1,62 @@
-# Salesforce DX Project: Next Steps
+# Investment Calculator
 
-Now that you’ve created a Salesforce DX project, what’s next? Here are some documentation resources to get you started.
+This is an **Investment Calculator** built using **Salesforce Lightning Web Components (LWC)** and **Apex**. The app allows users to input an initial investment amount, monthly deposits, annual interest rate, and the number of years. It calculates the growth of the investment under two scenarios:
 
-## How Do You Plan to Deploy Your Changes?
+1. Without Monthly Deposits
+2. With Monthly Deposits
 
-Do you want to deploy a set of changes, or create a self-contained application? Choose a [development model](https://developer.salesforce.com/tools/vscode/en/user-guide/development-models).
+The results are displayed in a table showing the balance and interest earned at the end of each year.
 
-## Configure Your Salesforce DX Project
+This is a remake of an academic project from college made originally in C++, you can find the original project [here.](https://github.com/GHPatrick/User-Input-Finance-Project)
 
-The `sfdx-project.json` file contains useful configuration information for your project. See [Salesforce DX Project Configuration](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm) in the _Salesforce DX Developer Guide_ for details about this file.
+## Features
 
-## Read All About It
+- **Initial Investment Amount**: The starting amount for the investment.
+- **Monthly Deposit**: Optional monthly contribution to the investment.
+- **Annual Interest Rate**: The interest rate applied to the investment annually.
+- **Number of Years**: The number of years the investment will grow.
 
-- [Salesforce Extensions Documentation](https://developer.salesforce.com/tools/vscode/)
-- [Salesforce CLI Setup Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
-- [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm)
-- [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference.htm)
+The app computes the balance and interest earned on a yearly basis, both with and without monthly deposits.
+
+## Components
+
+### 1. **Apex Controller - `InvestmentCalculatorController.cls`**
+This Apex class contains the logic to perform the calculations. It has a method `calculateInvestment` that accepts:
+- Initial investment (`initInv`)
+- Monthly deposit (`monDep`)
+- Annual interest rate (`anuInt`)
+- Number of years (`years`)
+
+The method returns a map containing the calculated results for each year, both with and without monthly deposits.
+
+### 2. **Lightning Web Component - `investmentCalculator.html`**
+The HTML file creates a user-friendly interface with input fields for:
+- Initial investment
+- Monthly deposit
+- Annual interest rate
+- Number of years
+
+It also includes a button to trigger the calculation and display the results in a table format.
+
+### 3. **Lightning Web Component - `investmentCalculator.js`**
+This JavaScript file handles the user inputs, triggers the Apex method when the "Calculate" button is pressed, and processes the results to display them in the UI.
+
+## Installation
+
+1. **Deploy the Apex Class**:
+   - Deploy `InvestmentCalculatorController.cls` to your Salesforce org.
+
+2. **Create the Lightning Web Component**:
+   - Deploy the `investmentCalculator.html` and `investmentCalculator.js` files.
+
+3. **Add the Component to a Page**:
+   - Drag and drop the component onto a Lightning page.
+
+## How to Use
+
+1. Enter the required values (Initial Investment, Monthly Deposit, Annual Interest Rate, Number of Years) into the input fields.
+2. Click the **Calculate** button to see the results.
+3. View the investment growth with and without monthly deposits in the result tables.
+
+## Video Demonstration
+https://github.com/user-attachments/assets/1731d9d6-754a-4b8c-a5f4-e2ba8598e474
