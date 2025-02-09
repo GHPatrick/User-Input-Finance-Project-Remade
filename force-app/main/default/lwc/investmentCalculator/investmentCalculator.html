@@ -1,3 +1,59 @@
 <template>
-    
+    <lightning-card title="Investment Calculator">
+        <div class="slds-p-around_medium">
+            <!-- form for data input -->
+            <lightning-input label="Initial Investment Amount ($)" value={initInv} onchange={handleInputChange} data-id="initInv"></lightning-input>
+            <lightning-input label="Monthly Deposit ($)" value={monDep} onchange={handleInputChange} data-id="monDep"></lightning-input>
+            <lightning-input label="Annual Interest Rate (%)" value={anuInt} onchange={handleInputChange} data-id="anuInt"></lightning-input>
+            <lightning-input label="Number of Years" type="number" value={years} onchange={handleInputChange} data-id="years"></lightning-input>
+            
+            <!-- calculate button -->
+            <lightning-button label="Calculate" onclick={handleCalculate}></lightning-button>
+            
+            <!-- display results -->
+            <template if:true={showResults}>
+                <div class="slds-m-top_medium">
+                    <h3>Balance and Interest Without Monthly Deposits</h3>
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                        <thead>
+                            <tr>
+                                <th>Year</th>
+                                <th>Year End Balance</th>
+                                <th>Year End Earned Interest</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={resultsWithoutDeposits} for:item="result">
+                                <tr key={result.year}>
+                                    <td>{result.year}</td>
+                                    <td>{result.balance}</td>
+                                    <td>{result.interest}</td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+
+                    <h3>Balance and Interest With Monthly Deposits</h3>
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                        <thead>
+                            <tr>
+                                <th>Year</th>
+                                <th>Year End Balance</th>
+                                <th>Year End Earned Interest</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={resultsWithDeposits} for:item="result">
+                                <tr key={result.year}>
+                                    <td>{result.year}</td>
+                                    <td>{result.balance}</td>
+                                    <td>{result.interest}</td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
 </template>

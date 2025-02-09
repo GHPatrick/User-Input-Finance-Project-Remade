@@ -1,29 +1,30 @@
 public with sharing class InvestmentCalculatorController {
 
     // setting of Map to return lists of records from the method
-    // method parameters of monDep, anuInt, year 
+    // method parameters of initInv, monDep, anuInt, years
     @AuraEnabled
-    public static Map<String, Object> caculateInvestment(Float monDep, Float anuInt, Integer year) {
+    public static Map<String, Object> calculateInvestment(Decimal initInv, Decimal monDep, Decimal anuInt, Integer years) {
 
         // initialize the result map
         Map<String, Object> result = new Map<String, Object>();
 
         // initialize total amount to total investment
-        Float totalAm = initInv;
+        Decimal totalAm = initInv;
 
         List<Map<String, Object>> yearlyResultsWithoutDeposits = new List<Map<String, Object>>();
         List<Map<String, Object>> yearlyResultsWithDeposits = new List<Map<String, Object>>();
 
         // calculate balance and interest without monthly deposits
         for (Integer i = 0; i < years; i++) {
-            Float intAmt = totalAm * (anuInt / 100);
+            Decimal intAmt = totalAm * (anuInt / 100);
             totalAm += intAmt;
 
         // map to store the results for the current year without deposits
+        // formatted values as strings with a rounding of two decimal places
             Map<String, Object> yearResult = new Map<String, Object>();
             yearResult.put('year', i + 1);
-            yearResult.put('balance', totalAm);
-            yearResult.put('interest', intAmt);
+            yearResult.put('balance', '$' + totalAm.setScale(2, RoundingMode.HALF_UP));
+            yearResult.put('interest', '$' + intAmt.setScale(2, RoundingMode.HALF_UP));
             yearlyResultsWithoutDeposits.add(yearResult);
         }
 
@@ -33,22 +34,23 @@ public with sharing class InvestmentCalculatorController {
 
         // calculate balance and interest with monthly deposits
         for (Integer i = 0; i < years; i++) {
-            Float yearTotInt = 0;
+            Decimal yearTotInt = 0;
 
 
         // identical to before, except adding for monthly deposits
             for (Integer j = 0; j < 12; j++) {
-                Float intAmt = (totalAm + monDep) * (anuInt / 100 / 12);
+                Decimal intAmt = (totalAm + monDep) * (anuInt / 100 / 12);
                 yearTotInt += intAmt;
                 totalAm += monDep + intAmt;
             }
 
 
         // similar Map as before except WITH deposits
+        // formatted values as strings with a rounding of two decimal places
             Map<String, Object> yearResult = new Map<String, Object>();
             yearResult.put('year', i + 1);
-            yearResult.put('balance', totalAm);
-            yearResult.put('interest', yearTotInt);
+            yearResult.put('balance', '$' + totalAm.setScale(2, RoundingMode.HALF_UP));
+            yearResult.put('interest', '$' + yearTotInt.setScale(2, RoundingMode.HALF_UP));
             yearlyResultsWithDeposits.add(yearResult);
         }
 
