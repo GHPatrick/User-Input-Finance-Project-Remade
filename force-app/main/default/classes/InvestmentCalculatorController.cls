@@ -19,16 +19,46 @@ public with sharing class InvestmentCalculatorController {
             Float intAmt = totalAm * (anuInt / 100);
             totalAm += intAmt;
 
-
-
-
-
+        // map to store the results for the current year without deposits
+            Map<String, Object> yearResult = new Map<String, Object>();
+            yearResult.put('year', i + 1);
+            yearResult.put('balance', totalAm);
+            yearResult.put('interest', intAmt);
+            yearlyResultsWithoutDeposits.add(yearResult);
         }
 
-        try {
-            
-        } catch (Exception e) {
-            throw new AuraHandledException(e.getMessage());
+        // reset total amount to initial investment
+        totalAm = initInv;
+
+
+        // calculate balance and interest with monthly deposits
+        for (Integer i = 0; i < years; i++) {
+            Float yearTotInt = 0;
+
+
+        // identical to before, except adding for monthly deposits
+            for (Integer j = 0; j < 12; j++) {
+                Float intAmt = (totalAm + monDep) * (anuInt / 100 / 12);
+                yearTotInt += intAmt;
+                totalAm += monDep + intAmt;
+            }
+
+
+        // similar Map as before except WITH deposits
+            Map<String, Object> yearResult = new Map<String, Object>();
+            yearResult.put('year', i + 1);
+            yearResult.put('balance', totalAm);
+            yearResult.put('interest', yearTotInt);
+            yearlyResultsWithDeposits.add(yearResult);
         }
+
+
+        // adds the lists of yearly results with and without deposits to the result
+        result.put('withoutDeposits', yearlyResultsWithoutDeposits);
+        result.put('withDeposits', yearlyResultsWithDeposits);
+
+        return result;
+
+
     }
 }
